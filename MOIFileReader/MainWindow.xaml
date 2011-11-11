@@ -1,0 +1,33 @@
+﻿<!--Copyright © 2011, Sean Clifford
+ *  This file is part of MOIParser.
+ *
+ *  MOIParser is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ *  MOIParser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along with MOIParser.  If not, see<http://www.gnu.org/licenses/> 
+ -->
+<Window x:Class="MOIParser.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="MOI File Reader" Height="188" Width="434" WindowStyle="SingleBorderWindow" MaxHeight="188" MinHeight="188" MinWidth="320">
+    <Grid>
+        <GroupBox Header="Choose File or Folder to Open"  Name="grpBoxFileOpen" Margin="12,12,12,35.451">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <RadioButton Height="16" HorizontalAlignment="Left" Margin="6,11,0,0" Name="rbFile" VerticalAlignment="Top" Width="61.812" IsChecked="True" Checked="rb_Checked">File:</RadioButton>
+                <TextBox Margin="73.262,8,87.264,0" Name="txtFile" Height="23.409" VerticalAlignment="Top" />
+                <Button Height="23" HorizontalAlignment="Right" Margin="0,7.48,6,0" Name="btnFileBrowse" VerticalAlignment="Top" Width="75" Click="btnFileBrowse_Click">Browse...</Button>
+                <RadioButton HorizontalAlignment="Left" Margin="6,11,0,0" Name="rbFolder" Width="61.812" Height="16" VerticalAlignment="Top" Grid.Row="1" IsChecked="False" Checked="rb_Checked">Folder:</RadioButton>
+                <TextBox Margin="73.262,8,87.264,0" Name="txtFolder" Height="23.409" VerticalAlignment="Top" Grid.Row="1" IsEnabled="False" />
+                <Button Height="23" HorizontalAlignment="Right" Margin="0,7.48,6,0" Name="btnFolderBrowse" Width="75" VerticalAlignment="Top" Grid.Row="1" Click="btnFolderBrowse_Click" IsEnabled="False">Browse...</Button>
+            </Grid>
+        </GroupBox>
+        <Button Height="23" HorizontalAlignment="Right" Name="btnGo" VerticalAlignment="Bottom" Width="75" Margin="0,0,12,6.363" Click="btnGo_Click">Go</Button>
+    </Grid>
+</Window>

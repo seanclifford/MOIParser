@@ -1,0 +1,135 @@
+﻿/* Copyright © 2011, Sean Clifford
+ * This file is part of MOIParser.
+ *
+ *  MOIParser is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+ *
+ *  MOIParser is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along with MOIParser.  If not, see <http://www.gnu.org/licenses/>.
+ */
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace MOIParser
+{
+    /// <summary>
+    /// File / Folder selection window.
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
+
+        /// <summary>
+        /// Browse for a File
+        /// </summary>
+        private void btnFileBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FileDialog fileDialog = new System.Windows.Forms.OpenFileDialog();
+            fileDialog.Filter = "MOI files (*.MOI)|*.moi";
+            if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                txtFile.Text = fileDialog.FileName;
+            }
+        }
+
+        /// <summary>
+        /// Browse for a Folder
+        /// </summary>
+        private void btnFolderBrowse_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            folderBrowserDialog.Description = "Select a folder";
+
+            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                txtFolder.Text = folderBrowserDialog.SelectedPath;
+            }
+        }
+
+        /// <summary>
+        /// File or Folder selection changed
+        /// </summary>
+        private void rb_Checked(object sender, RoutedEventArgs e)
+        {
+            if (this.IsInitialized)
+            {
+                txtFile.IsEnabled = rbFile.IsChecked ?? false;
+                btnFileBrowse.IsEnabled = txtFile.IsEnabled;
+
+                txtFolder.IsEnabled = rbFolder.IsChecked ?? false;
+                btnFolderBrowse.IsEnabled = txtFolder.IsEnabled;
+            }
+        }
+
+        /// <summary>
+        /// Get the selected file or folder path
+        /// </summary>
+        private string GetMoiPath()
+        {
+            return (rbFolder.IsChecked ?? false) ? txtFolder.Text : txtFile.Text;
+        }
+
+        /// <summary>
+        /// Button event that does the parsing of the files and opens a form to display the results.
+        /// </summary>
+        private void btnGo_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                string moiPath = GetMoiPath();
+                MOIPathParser moiParser = new MOIPathParser(moiPath);
+                moiParser.Parse();
+
+                DisplayParserResults(moiParser);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message + Environment.NewLine + ex.StackTrace, "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        /// <summary>
+        /// Displays the results if there are any
+        /// </summary>
+        private void DisplayParserResults(MOIPathParser moiParser)
+        {
+            if (moiParser.ParsedMOIFiles.Count() == 0 && moiParser.ParseErrors.Count() == 0)
+            {
+                MessageBox.Show(this, "No MOI Files Found", this.Title, MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            else
+            {
+                OpenMOIFileViewerForm(moiParser);
+            }
+        }
+
+        /// <summary>
+        /// Opens the MOI file viewer form to show the parse results.
+        /// </summary>
+        /// <param name="moiParser">The parser which should have already run</param>
+        private void OpenMOIFileViewerForm(MOIPathParser moiParser)
+        {
+            MOIFileViewer moiFileViewer = new MOIFileViewer();
+            moiFileViewer.PopulateFileGrid(moiParser.ParsedMOIFiles);
+            moiFileViewer.PopulateErrorGrid(moiParser.ParseErrors);
+
+            moiFileViewer.Show();
+        }
+    }
+}
