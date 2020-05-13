@@ -10,22 +10,23 @@
  *  You should have received a copy of the GNU General Public License along with MOIParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using MOIParser;
+using System.IO;
 
 namespace MOITests
 {
     [TestFixture]
     public class MOIPathParserTest
     {
+        private string TestDirectory => Path.Combine(TestContext.CurrentContext.TestDirectory, @"TestFiles\");
+        private string TestFile => Path.Combine(TestDirectory, "MOV045.MOI");
+
         [Test]
         public void TestFilePass()
         {
-            string relativePath = "..\\..\\TestFiles\\MOV045.MOI";
-            MOIPathParser pathParser = new MOIPathParser(relativePath);
+            MOIPathParser pathParser = new MOIPathParser(TestFile);
             pathParser.Parse();
 
             Assert.IsEmpty(pathParser.ParseErrors.ToList());
@@ -35,8 +36,7 @@ namespace MOITests
         [Test]
         public void TestDirectoryPass()
         {
-            string relativePath = "..\\..\\TestFiles\\";
-            MOIPathParser pathParser = new MOIPathParser(relativePath);
+            MOIPathParser pathParser = new MOIPathParser(TestDirectory);
             pathParser.Parse();
 
             Assert.IsEmpty(pathParser.ParseErrors.ToList());
@@ -44,12 +44,10 @@ namespace MOITests
         }
 
         [Test]
-        [ExpectedException(typeof(ApplicationException))]
         public void TestNoFile()
         {
-            string relativePath = "..\\..\\TestFiles\\NOTHERE.MOI";
-            MOIPathParser pathParser = new MOIPathParser(relativePath);
-            pathParser.Parse();
+            string badPath = Path.Combine(TestDirectory, "NOT_THERE.MOI");
+            Assert.Throws<ApplicationException>(() => new MOIPathParser(badPath));
         }
     }
 }

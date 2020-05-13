@@ -10,10 +10,7 @@
  *  You should have received a copy of the GNU General Public License along with MOIParser.  If not, see <http://www.gnu.org/licenses/>.
  */
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.IO;
 
 namespace MOIParser
 {
@@ -44,7 +41,6 @@ namespace MOIParser
         const int VIDEO_FMT_POS = 0x80;
         
         private byte[] moiData;
-        private MOIFile moiFile;
 
         /// <summary>
         /// Constructor which takes a byte array loaded from an MOI file.
@@ -59,10 +55,7 @@ namespace MOIParser
         /// The parsed data.
         /// </summary>
         /// <exception cref="ApplicationException">Throws if parsing if has been run.</exception>
-        public MOIFile MOIFile
-        {
-            get { return moiFile;}
-        }
+        public MOIFile MOIFile { get; private set; }
 
         /// <summary>
         /// This will store an exception if the Parse method fails.
@@ -73,7 +66,7 @@ namespace MOIParser
             get { return parserError; }
             private set
             {
-                moiFile = null; //MOI File should removed when we hit an error.
+                MOIFile = null; //MOI File should removed when we hit an error.
                 parserError = value;
             }
         }
@@ -98,7 +91,7 @@ namespace MOIParser
                 byte videoFmt = GetByte(VIDEO_FMT_POS);
 
                 //Create a MOI file object to store the parsed values.
-                moiFile = new MOIFile { Version = version, FileSize = moiFileSize };
+                MOIFile = new MOIFile { Version = version, FileSize = moiFileSize };
 
                 if (!SetCreationDate(year, month, day, hour, minute))
                     return false;
@@ -106,8 +99,8 @@ namespace MOIParser
                 if (!SetVideoLength(videoLengthMs))
                     return false;
 
-                moiFile.AspectRatio = ParseAspectRatio(videoFmt);
-                moiFile.TVSystem = ParseTVSystem(videoFmt);
+                MOIFile.AspectRatio = ParseAspectRatio(videoFmt);
+                MOIFile.TVSystem = ParseTVSystem(videoFmt);
 
                 return true;
             }
@@ -128,7 +121,7 @@ namespace MOIParser
         {
             try
             {
-                moiFile.CreationDate = new DateTime(year, month, day, hour, minute, 0);
+                MOIFile.CreationDate = new DateTime(year, month, day, hour, minute, 0);
             }
             catch (ArgumentException)
             {
@@ -151,7 +144,7 @@ namespace MOIParser
         {
             try
             {
-                moiFile.VideoLength = TimeSpan.FromMilliseconds(videoLengthMs);
+                MOIFile.VideoLength = TimeSpan.FromMilliseconds(videoLengthMs);
             }
             catch (SystemException e)
             {
