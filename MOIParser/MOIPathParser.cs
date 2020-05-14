@@ -64,14 +64,14 @@ namespace MOIParser
 
                 //Check that the file is actually an MOI file before adding it.
                 if (String.Compare(fileExtension, MoiExtension, true) != 0)
-                    throw new ApplicationException(String.Format("The file \"{0}\" is does not have an .MOI extension.", moiPath));//TODO: Add error message
+                    throw new ApplicationException($"The file \"{moiPath}\" is does not have an .MOI extension.");//TODO: Add error message
 
                 moiFilePaths.Add(moiPath);
             }
             else
             {
                 //If the path is not a path or directory, or it doesn't exist, throw it.
-                throw new ApplicationException(String.Format("Cannot find file or path \"{0}\"", moiPath));
+                throw new ApplicationException($"Cannot find file or path \"{moiPath}\"");
             }
         }
 

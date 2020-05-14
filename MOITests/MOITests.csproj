@@ -4,6 +4,16 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <Version>2019.11.0</Version>
+
+    <PackageProjectUrl>https://github.com/seanclifford/MOIParser</PackageProjectUrl>
+
+    <RepositoryUrl>https://github.com/seanclifford/MOIParser</RepositoryUrl>
+
+    <RepositoryType>github</RepositoryType>
+
+    <Copyright>Copyright ©  2019</Copyright>
   </PropertyGroup>
 
   <ItemGroup>

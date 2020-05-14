@@ -9,11 +9,13 @@
  *
  *  You should have received a copy of the GNU General Public License along with MOIParser.  If not, see <http://www.gnu.org/licenses/>.
  */
+using MOIParser;
 using System;
 using System.Linq;
 using System.Windows;
+using Microsoft.Win32;
 
-namespace MOIParser
+namespace MOIFileReader
 {
     /// <summary>
     /// File / Folder selection window.
@@ -30,9 +32,9 @@ namespace MOIParser
         /// </summary>
         private void btnFileBrowse_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FileDialog fileDialog = new System.Windows.Forms.OpenFileDialog();
+            OpenFileDialog fileDialog = new OpenFileDialog();
             fileDialog.Filter = "MOI files (*.MOI)|*.moi";
-            if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            if (fileDialog.ShowDialog() ?? false)
             {
                 txtFile.Text = fileDialog.FileName;
             }
@@ -43,13 +45,15 @@ namespace MOIParser
         /// </summary>
         private void btnFolderBrowse_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
-            folderBrowserDialog.Description = "Select a folder";
+            //TODO: either remove or make this work with .NET Core
 
-            if (folderBrowserDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                txtFolder.Text = folderBrowserDialog.SelectedPath;
-            }
+            //FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            //folderBrowserDialog.Description = "Select a folder";
+
+            //if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            //{
+            //    txtFolder.Text = folderBrowserDialog.SelectedPath;
+            //}
         }
 
         /// <summary>
